@@ -1,25 +1,45 @@
 import logo from './logo.svg';
 import './App.css';
+import React,{useState,useEffect} from 'react';
+import Axios from 'axios';
+
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+
+const [habs,setHabs] = useState([])
+
+useEffect(() => {
+  fetchHabs();
+
+}, [])
+useEffect(() => {
+  console.log(habs)
+}, [habs])
+
+const fetchHabs = async () => {
+  const response = await Axios('./public/nytreats.json');
+  setHabs(response.data)
+
+}
+return (
+  <div className="App">
+    {
+      habs && habs.map(hab=>{
+        return(
+          <div key={hab.PROVIDER_NUMBER} style={{alignItems:'center',margin:'20px 60px'}}>
+          <h4>{hab.PROVIDER_CITY}</h4>
+          <p>{hab.PROVIDER_NAME}</p>
+        </div>
+        )
+
+      })
+    }
+  </div>
+ 
   );
 }
+
+
+
 
 export default App;
